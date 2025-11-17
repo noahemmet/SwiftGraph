@@ -16,6 +16,8 @@
 //  See the License for the specific language governing permissions and
 //  limitations under the License.
 
+import Observation
+
 /// An implementation of Graph that has convenience methods for adding and removing WeightedEdges. All added Edges should have the same generic Comparable type W as the WeightedGraph itself.
 open class WeightedGraph<V: Equatable & Codable, W: Equatable & Codable>: Graph {
     

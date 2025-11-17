@@ -544,11 +544,11 @@ struct DijkstraNode<D: Comparable>: Comparable, Equatable {
     let vertex: Int
     let distance: D
     
-    static func < <D>(lhs: DijkstraNode<D>, rhs: DijkstraNode<D>) -> Bool {
+    static func < <DD>(lhs: DijkstraNode<DD>, rhs: DijkstraNode<DD>) -> Bool {
         return lhs.distance < rhs.distance
     }
     
-    static func == <D>(lhs: DijkstraNode<D>, rhs: DijkstraNode<D>) -> Bool {
+    static func == <DD>(lhs: DijkstraNode<DD>, rhs: DijkstraNode<DD>) -> Bool {
         return lhs.distance == rhs.distance
     }
 }
