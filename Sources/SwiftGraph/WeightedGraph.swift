@@ -17,13 +17,14 @@
 //  limitations under the License.
 
 import Observation
+import SwiftUI
 
 /// An implementation of Graph that has convenience methods for adding and removing WeightedEdges. All added Edges should have the same generic Comparable type W as the WeightedGraph itself.
+@Observable
 open class WeightedGraph<V: Equatable & Codable, W: Equatable & Codable>: Graph {
-    
     public var vertices: [V] = [V]()
     public var edges: [[WeightedEdge<W>]] = [[WeightedEdge<W>]]() //adjacency lists
-    
+
     public init() {
     }
     
@@ -52,6 +53,12 @@ open class WeightedGraph<V: Equatable & Codable, W: Equatable & Codable>: Graph 
         edges.append([E]())
         return vertices.count - 1
     }
+}
+
+extension WeightedGraph: Equatable {
+  public static func ==(lhs: WeightedGraph, rhs: WeightedGraph) -> Bool {
+    return lhs.vertices == rhs.vertices && lhs.edges == rhs.edges
+  }
 }
 
 extension Graph where E: WeightedEdgeProtocol {
