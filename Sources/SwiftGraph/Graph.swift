@@ -299,7 +299,12 @@ extension Graph {
     /// - Parameter index: The index of vertex to return.
     /// - returns: The vertex at index.
     public subscript(i: Int) -> V {
+      get {
         return vertexAtIndex(i)
+      }
+      set {
+        vertices[i] = newValue
+      }
     }
 }
 
