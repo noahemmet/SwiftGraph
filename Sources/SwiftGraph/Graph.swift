@@ -155,11 +155,11 @@ extension Graph {
     /// - parameter from: The starting vertex's index.
     /// - parameter to: The ending vertex's index.
     /// - parameter bidirectional: Remove edges coming back (to -> from)
-    public func removeAllEdges(from: Int, to: Int, bidirectional: Bool = true) {
-        edges[from].removeAll(where: { $0.v == to })
-        
+  public func removeAllEdges(from: Int, to: Int, bidirectional: Bool = true, where predicate: (E) -> Bool = { _ in true }) {
+    edges[from].removeAll(where: { $0.v == to && predicate($0) })
+
         if bidirectional {
-            edges[to].removeAll(where: { $0.v == from })
+            edges[to].removeAll(where: { $0.v == from && predicate($0) })
         }
     }
     
@@ -181,9 +181,7 @@ extension Graph {
     /// - parameter e: The edge to remove.
     public func removeEdge(_ e: E) {
         if let index = edges[e.u].firstIndex(where: { $0 == e }) {
-          print("xxx edges before (\(index))", edges.count)
             edges[e.u].remove(at: index)
-          print("xxx edges after ", edges.count)
         }
     }
     
