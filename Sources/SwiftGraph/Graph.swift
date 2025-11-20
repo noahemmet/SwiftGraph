@@ -19,7 +19,7 @@
 /// The protocol for all graphs.
 /// You should generally use one of its two canonical class implementations,
 /// *UnweightedGraph* and *WeightedGraph*
-public protocol Graph: CustomStringConvertible, Collection, Codable {
+public protocol Graph: AnyObject, CustomStringConvertible, Collection, Codable {
     associatedtype V: Equatable & Codable
     associatedtype E: Edge & Equatable
     var vertices: [V] { get set }
@@ -134,7 +134,7 @@ extension Graph {
     ///
     /// - parameter v: The vertex to be added.
     /// - returns: The index where the vertex was added.
-    public mutating func addVertex(_ v: V) -> Int {
+    public func addVertex(_ v: V) -> Int {
         vertices.append(v)
         edges.append([E]())
         return vertices.count - 1
@@ -143,7 +143,7 @@ extension Graph {
     /// Add an edge to the graph.
     ///
     /// - parameter e: The edge to add.
-    public mutating func addEdge(_ e: E) {
+    public func addEdge(_ e: E) {
         edges[e.u].append(e)
         if !e.directed && e.u != e.v {
             edges[e.v].append(e.reversed())
@@ -155,7 +155,7 @@ extension Graph {
     /// - parameter from: The starting vertex's index.
     /// - parameter to: The ending vertex's index.
     /// - parameter bidirectional: Remove edges coming back (to -> from)
-    public mutating func removeAllEdges(from: Int, to: Int, bidirectional: Bool = true) {
+    public func removeAllEdges(from: Int, to: Int, bidirectional: Bool = true) {
         edges[from].removeAll(where: { $0.v == to })
         
         if bidirectional {
@@ -168,7 +168,7 @@ extension Graph {
     /// - parameter from: The starting vertex.
     /// - parameter to: The ending vertex.
     /// - parameter bidirectional: Remove edges coming back (to -> from)
-    public mutating func removeAllEdges(from: V, to: V, bidirectional: Bool = true) {
+    public func removeAllEdges(from: V, to: V, bidirectional: Bool = true) {
         if let u = indexOfVertex(from) {
             if let v = indexOfVertex(to) {
                 removeAllEdges(from: u, to: v, bidirectional: bidirectional)
@@ -179,16 +179,18 @@ extension Graph {
     /// Remove the first edge found to be equal to *e*
     ///
     /// - parameter e: The edge to remove.
-    public mutating func removeEdge(_ e: E) {
+    public func removeEdge(_ e: E) {
         if let index = edges[e.u].firstIndex(where: { $0 == e }) {
+          print("xxx edges before (\(index))", edges.count)
             edges[e.u].remove(at: index)
+          print("xxx edges after ", edges.count)
         }
     }
     
     /// Removes a vertex at a specified index, all of the edges attached to it, and renumbers the indexes of the rest of the edges.
     ///
     /// - parameter index: The index of the vertex.
-    public mutating func removeVertexAtIndex(_ index: Int) {
+    public func removeVertexAtIndex(_ index: Int) {
         //remove all edges ending at the vertex, first doing the ones below it
         //renumber edges that end after the index
         for j in 0..<index {
@@ -234,7 +236,7 @@ extension Graph {
     /// Removes the first occurence of a vertex, all of the edges attached to it, and renumbers the indexes of the rest of the edges.
     ///
     /// - parameter vertex: The vertex to be removed..
-    public mutating func removeVertex(_ vertex: V) {
+    public func removeVertex(_ vertex: V) {
         if let i = indexOfVertex(vertex) {
             removeVertexAtIndex(i)
         }
