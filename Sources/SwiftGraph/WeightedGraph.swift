@@ -68,7 +68,7 @@ extension Graph where E: WeightedEdgeProtocol {
     ///
     /// - parameter index: The index for the vertex to find the neighbors of.
     /// - returns: An array of tuples including the vertices as the first element and the weights as the second element.
-    public func neighborsForIndexWithWeights(_ index: Int) -> [(V, W)] {
+  public func neighborsForIndexWithWeights(_ index: Int) -> [(vertex: V, weight: W)] {
         var distanceTuples: [(V, W)] = [(V, W)]();
         for edge in edges[index] {
             distanceTuples += [(vertices[edge.v], edge.weight)]
