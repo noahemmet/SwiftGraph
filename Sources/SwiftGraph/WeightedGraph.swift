@@ -98,6 +98,10 @@ extension Graph where E: WeightedEdgeProtocol {
         }
     }
 
+  public func edges(fromIndex: Int, toIndex: Int) -> [E] {
+    edges[fromIndex].filter { $0.v == toIndex }
+  }
+
     /// Check whether there is an edge from one vertex to another vertex with a specific weight.
     ///
     /// - parameter from: The index of the starting vertex of the edge.
