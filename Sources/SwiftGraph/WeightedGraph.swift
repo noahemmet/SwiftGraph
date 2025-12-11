@@ -20,15 +20,15 @@ import Observation
 import SwiftUI
 
 /// An implementation of Graph that has convenience methods for adding and removing WeightedEdges. All added Edges should have the same generic Comparable type W as the WeightedGraph itself.
-@Observable
-open class WeightedGraph<V: Equatable & Codable, W: Equatable & Codable>: Graph {
+//@Observable
+public struct WeightedGraph<V: Equatable & Codable, W: Equatable & Codable>: Graph {
     public var vertices: [V] = [V]()
     public var edges: [[WeightedEdge<W>]] = [[WeightedEdge<W>]]() //adjacency lists
 
     public init() {
     }
     
-    required public init(vertices: [V]) {
+    public init(vertices: [V]) {
         for vertex in vertices {
             _ = self.addVertex(vertex)
         }
@@ -37,7 +37,7 @@ open class WeightedGraph<V: Equatable & Codable, W: Equatable & Codable>: Graph 
     /// Add an edge to the graph.
     ///
     /// - parameter e: The edge to add.
-    public func addEdge(_ e: WeightedEdge<W>) {
+  public mutating func addEdge(_ e: WeightedEdge<W>) {
         edges[e.u].append(e)
         if !e.directed && e.u != e.v {
             edges[e.v].append(e.reversed())
@@ -48,7 +48,7 @@ open class WeightedGraph<V: Equatable & Codable, W: Equatable & Codable>: Graph 
     ///
     /// - parameter v: The vertex to be added.
     /// - returns: The index where the vertex was added.
-    public func addVertex(_ v: V) -> Int {
+  public mutating func addVertex(_ v: V) -> Int {
         vertices.append(v)
         edges.append([E]())
         return vertices.count - 1
@@ -82,7 +82,7 @@ extension Graph where E: WeightedEdgeProtocol {
     /// - parameter to: The ending vertex's index.
     /// - parameter directed: Is the edge directed? (default false)
     /// - parameter weight: the Weight of the edge to add.
-    public func addEdge(fromIndex: Int, toIndex: Int, weight: W, directed: Bool = false) {
+    public mutating func addEdge(fromIndex: Int, toIndex: Int, weight: W, directed: Bool = false) {
         addEdge(E(u: fromIndex, v: toIndex, directed: directed, weight: weight))
     }
     
@@ -92,7 +92,7 @@ extension Graph where E: WeightedEdgeProtocol {
     /// - parameter to: The ending vertex.
     /// - parameter directed: Is the edge directed? (default false)
     /// - parameter weight: the Weight of the edge to add.
-    public func addEdge(from: V, to: V, weight: W, directed: Bool = false) {
+    public mutating func addEdge(from: V, to: V, weight: W, directed: Bool = false) {
         if let u = indexOfVertex(from), let v = indexOfVertex(to) {
             addEdge(fromIndex: u, toIndex: v, weight: weight, directed: directed)
         }

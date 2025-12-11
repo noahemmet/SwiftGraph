@@ -67,7 +67,7 @@ extension Graph where E == UnweightedEdge {
     ///               If true, edges are directed from vertex i to vertex i+1 in path.
     ///               Default is false.
     public static func withPath(_ path: [V], directed: Bool = false) -> Self {
-        let g = Self(vertices: path)
+        var g = Self(vertices: path)
 
         guard path.count >= 2 else {
             return g
@@ -96,7 +96,7 @@ extension Graph where E == UnweightedEdge {
     ///               If true, edges are directed from vertex i to vertex i+1 in cycle.
     ///               Default is false.
     public static func withCycle(_ cycle: [V], directed: Bool = false) -> Self {
-        let g = Self.withPath(cycle, directed: directed)
+        var g = Self.withPath(cycle, directed: directed)
         if cycle.count > 0 {
             g.addEdge(fromIndex: cycle.count-1, toIndex: 0, directed: directed)
         }
@@ -108,7 +108,7 @@ extension Graph where E == UnweightedEdge {
     /// - parameter from: The starting vertex's index.
     /// - parameter to: The ending vertex's index.
     /// - parameter directed: Is the edge directed? (default `false`)
-    public func addEdge(fromIndex: Int, toIndex: Int, directed: Bool = false) {
+    public mutating func addEdge(fromIndex: Int, toIndex: Int, directed: Bool = false) {
         addEdge(UnweightedEdge(u: fromIndex, v: toIndex, directed: directed))
     }
     
@@ -117,7 +117,7 @@ extension Graph where E == UnweightedEdge {
     /// - parameter from: The starting vertex.
     /// - parameter to: The ending vertex.
     /// - parameter directed: Is the edge directed? (default `false`)
-    public func addEdge(from: V, to: V, directed: Bool = false) {
+    public mutating func addEdge(from: V, to: V, directed: Bool = false) {
         if let u = indexOfVertex(from), let v = indexOfVertex(to) {
             addEdge(UnweightedEdge(u: u, v: v, directed: directed))
         }

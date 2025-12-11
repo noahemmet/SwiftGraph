@@ -21,7 +21,7 @@ extension Graph {
     ///
     /// - returns: Graph of the same type with all edges reversed.
     public func reversed() -> Self {
-        let g = Self(vertices: self.vertices)
+        var g = Self(vertices: self.vertices)
         for e in self.edgeList() {
             g.addEdge(e.reversed())
         }

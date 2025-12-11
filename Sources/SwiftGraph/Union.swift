@@ -30,7 +30,7 @@ public extension UniqueElementsGraph where E == UnweightedEdge {
     /// - Parameters:
     ///   - graphs: Array of graphs to build the union from.
     static func unionOf(_ graphs: [UniqueElementsGraph]) -> UniqueElementsGraph{
-        let union = UniqueElementsGraph()
+        var union = UniqueElementsGraph()
 
         guard let firstGraph = graphs.first else { return union }
         let others = graphs.dropFirst()

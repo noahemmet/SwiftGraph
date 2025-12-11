@@ -20,7 +20,7 @@ public typealias UnweightedUniqueElementsGraph<V: Equatable & Codable> = UniqueE
 public typealias WeightedUniqueElementsGraph<V: Equatable & Codable, W: Equatable & Codable> = UniqueElementsGraph<V, WeightedEdge<W>>
 
 /// An implementation Graph that ensures there are no pairs of equal vertices and no repeated edges.
-open class UniqueElementsGraph<V: Equatable & Codable, E: Edge & Equatable>: Graph {
+public struct UniqueElementsGraph<V: Equatable & Codable, E: Edge & Equatable>: Graph {
     public var vertices: [V] = [V]()
     public var edges: [[E]] = [[E]]() //adjacency lists
 
@@ -28,7 +28,7 @@ open class UniqueElementsGraph<V: Equatable & Codable, E: Edge & Equatable>: Gra
     }
 
     /// Init the Graph with vertices, but removes duplicates. O(n^2)
-    required public init(vertices: [V]) {
+    public init(vertices: [V]) {
         for vertex in vertices {
             _ = self.addVertex(vertex) // make sure to call our version
         }
@@ -38,7 +38,7 @@ open class UniqueElementsGraph<V: Equatable & Codable, E: Edge & Equatable>: Gra
     ///
     /// - parameter v: The vertex to be added.
     /// - returns: The index where the vertex was added, or the index of the equal vertex already belonging to the graph.
-    public func addVertex(_ v: V) -> Int {
+    public mutating func addVertex(_ v: V) -> Int {
         if let equalVertexIndex = indexOfVertex(v) {
             return equalVertexIndex
         }
@@ -50,7 +50,7 @@ open class UniqueElementsGraph<V: Equatable & Codable, E: Edge & Equatable>: Gra
     /// Add an edge to the graph. Only allow the edge to be added once
     ///
     /// - parameter e: The edge to add.
-    public func addEdge(_ e: E) {
+    public mutating func addEdge(_ e: E) {
         if !self.edgeExists(e) {
             edges[e.u].append(e)
         }
@@ -65,7 +65,7 @@ open class UniqueElementsGraph<V: Equatable & Codable, E: Edge & Equatable>: Gra
 
 extension UniqueElementsGraph where E == UnweightedEdge {
 
-    private func addEdgesForPath(withIndices indices: [Int], directed: Bool) {
+  private mutating func addEdgesForPath(withIndices indices: [Int], directed: Bool) {
         for i in 0..<indices.count - 1 {
             addEdge(fromIndex: indices[i], toIndex: indices[i+1], directed: directed)
         }
@@ -85,7 +85,7 @@ extension UniqueElementsGraph where E == UnweightedEdge {
     ///               If true, edges are directed from vertex i to vertex i+1 in path.
     ///               Default is false.
     public static func withPath(_ path: [V], directed: Bool = false) -> UniqueElementsGraph {
-        let g = UniqueElementsGraph(vertices: path)
+        var g = UniqueElementsGraph(vertices: path)
 
         guard path.count >= 2 else {
             return g
@@ -113,7 +113,7 @@ extension UniqueElementsGraph where E == UnweightedEdge {
     ///               If true, edges are directed from vertex i to vertex i+1 in cycle.
     ///               Default is false.
     public static func withCycle(_ cycle: [V], directed: Bool = false) -> UniqueElementsGraph {
-        let g = UniqueElementsGraph(vertices: cycle)
+        var g = UniqueElementsGraph(vertices: cycle)
 
         guard cycle.count >= 2 else {
             if let v = cycle.first {
@@ -152,7 +152,7 @@ extension UniqueElementsGraph where E == UnweightedEdge {
     /// - Parameter vertexFor: A function that returns the vertex that will be added to the graph for each visited element.
     /// - Parameter initialElement: The first element to which the recursion function is applied.
     public static func fromRecursion<T>(_ recursion: (T) -> [T], selectingVertex vertexFor: (T) -> V, startingWith initialElement: T) -> UniqueElementsGraph {
-        let g = UniqueElementsGraph(vertices: [])
+        var g = UniqueElementsGraph(vertices: [])
 
         let queue = Queue<QueueElement<T>>()
 
@@ -187,7 +187,7 @@ extension UniqueElementsGraph where E == UnweightedEdge {
 
 extension UniqueElementsGraph where V: Hashable, E == UnweightedEdge {
     public static func withPath(_ path: [V], directed: Bool = false) -> UniqueElementsGraph {
-        let g = UniqueElementsGraph()
+        var g = UniqueElementsGraph()
 
         guard path.count >= 2 else {
             if let v = path.first {
@@ -203,7 +203,7 @@ extension UniqueElementsGraph where V: Hashable, E == UnweightedEdge {
 
 
     public static func withCycle(_ cycle: [V], directed: Bool = false) -> UniqueElementsGraph {
-        let g = UniqueElementsGraph()
+        var g = UniqueElementsGraph()
 
         guard cycle.count >= 2 else {
             if let v = cycle.first {
@@ -219,7 +219,7 @@ extension UniqueElementsGraph where V: Hashable, E == UnweightedEdge {
         return g
     }
 
-    private func indicesForPath(_ path: [V]) -> [Int] {
+    private mutating func indicesForPath(_ path: [V]) -> [Int] {
         var indices: [Int] = []
         var indexForVertex: Dictionary<V, Int> = [:]
 

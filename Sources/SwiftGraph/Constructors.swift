@@ -28,7 +28,7 @@ public enum StarGraph<V: Equatable & Codable> {
     /// - Returns: An UnweightedGraph star graph with the center vertex connected to all the leafs. The leafs
     ///            are only connected to the center
     public static func build(withCenter center: V, andLeafs leafs: [V]) -> UnweightedGraph<V> {
-        let g = UnweightedGraph<V>(vertices: [center] + leafs)
+        var g = UnweightedGraph<V>(vertices: [center] + leafs)
 
         guard leafs.count > 0 else { return g }
         for i in 1...leafs.count {
@@ -48,7 +48,7 @@ public enum CompleteGraph<V: Equatable & Codable> {
     /// - Parameter vertices: The set of vertices of the graph.
     /// - Returns: An UnweightedGraph complete graph, a graph with each vertex connected to all the vertices except itself.
     public static func build(withVertices vertices: [V]) -> UnweightedGraph<V> {
-        let g = UnweightedGraph<V>(vertices: vertices)
+        var g = UnweightedGraph<V>(vertices: vertices)
 
         for i in 0..<vertices.count {
             for j in 0..<i {
