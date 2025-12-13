@@ -17,14 +17,14 @@
 //  limitations under the License.
 
 /// An implementation of Graph with some convenience methods for adding and removing UnweightedEdges. WeightedEdges may be added to an UnweightedGraph but their weights will be ignored.
-open class UnweightedGraph<V: Equatable & Codable>: Graph {
+public struct UnweightedGraph<V: Hashable & Codable>: Graph, Codable, Hashable {
     public var vertices: [V] = [V]()
     public var edges: [[UnweightedEdge]] = [[UnweightedEdge]]() //adjacency lists
     
     public init() {
     }
     
-    required public init(vertices: [V]) {
+    public init(vertices: [V]) {
         for vertex in vertices {
             _ = self.addVertex(vertex)
         }
@@ -33,7 +33,7 @@ open class UnweightedGraph<V: Equatable & Codable>: Graph {
     /// Add an edge to the graph.
     ///
     /// - parameter e: The edge to add.
-    public func addEdge(_ e: UnweightedEdge) {
+    public mutating func addEdge(_ e: UnweightedEdge) {
         edges[e.u].append(e)
         if !e.directed && e.u != e.v {
             edges[e.v].append(e.reversed())
@@ -44,7 +44,7 @@ open class UnweightedGraph<V: Equatable & Codable>: Graph {
     ///
     /// - parameter v: The vertex to be added.
     /// - returns: The index where the vertex was added.
-    public func addVertex(_ v: V) -> Int {
+    public mutating func addVertex(_ v: V) -> Int {
         vertices.append(v)
         edges.append([E]())
         return vertices.count - 1
